@@ -42,7 +42,7 @@ const [status, execute, resolve, reject, reset] = useAwaitableComponent()
 ```
 | Field | Type | Descriptions |
 |--|--|--|
-| `status` | `'idle' | 'awaiting' | 'resolved' | 'rejected'` | Current awaitable component status |
+| `status` | `'idle' \| 'awaiting' \| 'resolved' \| 'rejected'` | Current awaitable component status |
 | `execute` | `() => Promise` | A function to start execution |
 | `resolve` | `(data: any) => void` | A callback to call after component completed without error |
 | `reject` | `(reason: any) => void` | A callback to call after component completed with error |
