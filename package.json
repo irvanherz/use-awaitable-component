@@ -2,35 +2,53 @@
   "name": "use-awaitable-component",
   "version": "0.0.1",
   "description": "React hook for awaiting a component's callback.",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
   "repository": "https://github.com/irvanherz/use-awaitable-component.git",
   "author": "Irvan <irvan.herz@gmail.com>",
   "license": "MIT",
-  "keywords": [
-    "react-helmet",
-    "nfl",
-    "react",
-    "document",
-    "head",
-    "title",
-    "meta",
-    "link",
-    "script",
-    "base",
-    "noscript",
-    "style"
+  "homepage": "https://github.com/irvanherz/use-awaitable-component#readme",
+  "bugs": {
+    "url": "https://github.com/irvanherz/use-awaitable-component/issues"
+  },
+  "files": [
+    "lib/",
+    "esm/"
   ],
+  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
+  "keywords": [
+    "awaitable",
+    "await",
+    "react",
+    "react-hooks",
+    "hooks"
+  ],
+  "dependencies": {
+    "tslib": "^2.1.0"
+  },
   "peerDependencies": {
     "react": ">=15.0.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@types/jest": "^27.4.0",
     "babel-cli": "^6.24.0",
     "babel-core": "^6.24.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.4.1",
-    "babel-preset-env": "^1.2.2",
-    "babel-preset-react": "^6.23.0",
-    "react": "^15.x",
-    "webpack": "^2.2.1"
+    "jest": "^27.4.7",
+    "react": "^16.9.0",
+    "react-test-renderer": "^16.9.0",
+    "typescript": "4.1.5"
+  },
+  "scripts": {
+    "build:cjs": "tsc",
+    "build:es": "tsc -m esNext --outDir esm",
+    "build": "yarn build:cjs && yarn build:es",
+    "test": "jest"
   }
 }

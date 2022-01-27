@@ -1,20 +1,35 @@
 
+
 # use-awaitable-component
 
 React hook for awaiting a component's callback.
+
+## Installation
+**npm**
+```console
+npm install use-awaitable-component
+```
+**yarn**
+```console
+yarn add use-awaitable-component
+```
+
 ## Usage
 ```jsx
+...
+import useAwaitableComponent from 'use-awaitable-component';
+...
 const Example = () => {
-  const [awaitLoginStatus, handleAwaitLogin, handleAwaitLoginResolved, handleAwaitLoginRejected, handleAwaitLoginReset] = useAwaitableComponent()
+  const [awaitLoginStatus, handleAwaitLogin, handleAwaitLoginResolved, handleAwaitLoginRejected, handleAwaitLoginReset] = useAwaitableComponent();
 
   const handleLogin = async () => {
     try {
-      const res = await handleAwaitLogin()
+      const res = await handleAwaitLogin();
       console.log("LOGIN SUCCESS: ", res);
     } catch (err) {
       console.log("LOGIN ERROR: ", err);
     } finally {
-      handleAwaitLoginReset()
+      handleAwaitLoginReset();
     }
   }
   return (
