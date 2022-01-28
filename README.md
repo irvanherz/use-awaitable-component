@@ -51,6 +51,9 @@ const Example = () => {
 }
 ```
 
+## Live Demo
+See live demo on [Codesandbox](https://codesandbox.io/s/use-awaitable-component-demo-kok6g).
+
 ## Reference
 ```jsx
 const [status, execute, resolve, reject, reset] = useAwaitableComponent()
