@@ -1,38 +1,36 @@
 import { useState } from 'react'
 
 export type AwaitableComponentStatus = 'idle' | 'awaiting' | 'resolved' | 'rejected'
-type AwaitableComponentExecutor = {
+type AwaitableComponentData = {
+  status: AwaitableComponentStatus,
   resolve: ((value: unknown) => void) | null,
   reject: ((reason: any) => void) | null,
 }
 
 export default function useAwaitableComponent() {
-  const [status, setStatus] = useState<AwaitableComponentStatus>('idle')
-  const [executor, setExecutor] = useState <AwaitableComponentExecutor>({ resolve: null, reject: null })
+  const [data, setData] = useState<AwaitableComponentData>({ status: 'idle', resolve: null, reject: null })
 
-  const handleResolve = data => {
-    if (executor.resolve === null) throw "Resolver is null. Please call execute() before calling resolve()"
-    setStatus('resolved')
-    executor.resolve(data)
+  const handleResolve = val => {
+    if (data.status !== 'awaiting') throw "Awaitable component is not awaiting."
+    data.resolve?.(val)
+    setData({ status: 'resolved', resolve: null, reject: null })
   }
 
   const handleReject = err => {
-    if (executor.reject === null) throw "Rejector is null. Please call execute() before calling resolve()"
-    setStatus('rejected')
-    executor.reject(err)
+    if (data.status !== 'awaiting') throw "Awaitable component is not awaiting."
+    data.reject?.(err)
+    setData({ status: 'rejected', resolve: null, reject: null })
   }
 
   const handleReset = () => {
-    setStatus('idle')
-    setExecutor({ resolve: null, reject: null })
+    setData({ status: 'idle', resolve: null, reject: null })
   }
 
-  const execute = async () => {
-    setStatus('awaiting')
+  const handleExecute = async () => {
     return new Promise((resolve, reject) => {
-      setExecutor({ resolve, reject })
+      setData({ status: 'awaiting', resolve, reject })
     })
   }
-  return [status, execute, handleResolve, handleReject, handleReset] as const
+  return [data.status, handleExecute, handleResolve, handleReject, handleReset] as const
 }
 

@@ -2,52 +2,79 @@
 
 # use-awaitable-component
 
-React hook for awaiting a component's callback.
+React hook for awaiting component callback.
 
 ## Installation
 **npm**
-```console
+```
 npm install use-awaitable-component
 ```
 **yarn**
-```console
+```
 yarn add use-awaitable-component
 ```
 
 ## Usage
 ```jsx
-...
-import useAwaitableComponent from 'use-awaitable-component';
-...
-const Example = () => {
-  const [awaitLoginStatus, handleAwaitLogin, handleAwaitLoginResolved, handleAwaitLoginRejected, handleAwaitLoginReset] = useAwaitableComponent();
+import { useState } from "react";
+import useAwaitableComponent from "use-awaitable-component";
+import "./styles.css";
 
-  const handleLogin = async () => {
-    try {
-      const res = await handleAwaitLogin();
-      console.log("LOGIN SUCCESS: ", res);
-    } catch (err) {
-      console.log("LOGIN ERROR: ", err);
-    } finally {
-      handleAwaitLoginReset();
-    }
-  }
+function Modal({ visible, onSubmit, onCancel }) {
+  const [text, setText] = useState("");
+  const display = visible ? "block" : "none";
+
+  const handleSubmit = () => {
+    onSubmit(text);
+    setText("");
+  };
+
+  const handleCancel = () => {
+    onCancel(":)");
+  };
+
   return (
-    <>
-      <Button
-        onClick={handleLogin}
-        loading={awaitLoginStatus === 'awaiting'}
-      >
-        LOGIN
-      </Button>
-      <ExampleLoginModal
-        visible={awaitLoginStatus === 'awaiting'}
-        afterLoginSucceeded={handleAwaitLoginResolved}
-        afterLoginFailed={handleAwaitLoginRejected}
-        onCancel={handleAwaitLoginReset}
-      />
-    </>
-  )
+    <div className="modal" style={{ display }}>
+      <div className="modal-head">This is a modal</div>
+      <div className="modal-body">
+        <input
+          placeholder="Type something here..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button onClick={handleSubmit}>Submit</button>
+      </div>
+      <button className="modal-close" onClick={handleCancel}>
+        X
+      </button>
+    </div>
+  );
+}
+
+export default function App() {
+  const [status, execute, resolve, reject, reset] = useAwaitableComponent();
+  const showModal = status === "awaiting";
+
+  const handleAwaitModal = async () => {
+    try {
+      const value = await execute();
+      alert(`VALUE: ${value}`);
+    } catch (err) {
+      alert(`Canceled: ${err}`);
+    } finally {
+      reset();
+    }
+  };
+  return (
+    <div className="App">
+      <div className="button-container">
+        <button disabled={showModal} onClick={handleAwaitModal}>
+          {showModal ? "Waiting..." : "Show Modal"}
+        </button>
+      </div>
+      <Modal visible={showModal} onSubmit={resolve} onCancel={reject} />
+    </div>
+  );
 }
 ```
 

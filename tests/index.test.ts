@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import useAwaitableComponent from '../src/index'
 
 const { result } = renderHook(() => useAwaitableComponent())
-it('should correectly set status', () => {
+it('should correctly set status', async () => {
   expect(result.current[0]).toBe('idle')
   act(() => {
     result.current[1]()
@@ -17,7 +17,11 @@ it('should correectly set status', () => {
   })
   expect(result.current[0]).toBe('idle')
   act(() => {
-    result.current[1]()
+    result.current[1]().catch(_ => {})
   })
   expect(result.current[0]).toBe('awaiting')
+  act(() => {
+    result.current[3]('err')
+  })
+  expect(result.current[0]).toBe('rejected')
 })
